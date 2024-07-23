@@ -8,6 +8,13 @@ if [ "${NGINX_HTTPS_ENABLED}" = "true" ]; then
     envsubst '${HTTPS_CONFIG}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 fi
 
+if [ "${USE_CERTBOT_WEBHOOK}" = "true" ]; then
+    ACME_CHALLENGE_LOCATION='location /.well-known/acme-challenge/ { root /var/www/html; }'
+else
+    ACME_CHALLENGE_LOCATION=''
+fi
+export ACME_CHALLENGE_LOCATION
+
 env_vars=$(printenv | cut -d= -f1 | sed 's/^/$/g' | paste -sd, -)
 
 envsubst "$env_vars" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
