@@ -8,7 +8,7 @@ if [ "${NGINX_HTTPS_ENABLED}" = "true" ]; then
     envsubst '${HTTPS_CONFIG}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 fi
 
-if [ "${NGINX_USE_CERTBOT_WEBHOOK}" = "true" ]; then
+if [ "${NGINX_CREATE_CERTBOT_CHALNENGE_LOCATION}" = "true" ]; then
     ACME_CHALLENGE_LOCATION='location /.well-known/acme-challenge/ { root /var/www/html; }'
 else
     ACME_CHALLENGE_LOCATION=''
