@@ -295,8 +295,7 @@ services:
       - ssrf_proxy_network
       - default
 
-  # Existing Certbot service
-  # used for generating SSL certificates.
+  # Certbot service
   # use `docker-compose --profile certbot up` to start the certbot service.
   certbot:
     image: certbot/certbot
@@ -306,7 +305,7 @@ services:
       - ./volumes/certbot/conf:/etc/letsencrypt
       - ./volumes/certbot/www:/var/www/html
       - ./volumes/certbot/logs:/var/log/letsencrypt
-    command: certonly --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
+    command: certonly --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
     depends_on:
       - nginx
 
