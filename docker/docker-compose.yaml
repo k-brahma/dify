@@ -305,9 +305,17 @@ services:
       - ./volumes/certbot/conf:/etc/letsencrypt
       - ./volumes/certbot/www:/var/www/html
       - ./volumes/certbot/logs:/var/log/letsencrypt
-    command: certonly --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
-    depends_on:
-      - nginx
+      - ./update-cert.sh.template:/update-cert.sh.template
+    environment:
+      - CERTBOT_EMAIL=${CERTBOT_EMAIL}
+      - CERTBOT_DOMAIN=${CERTBOT_DOMAIN}
+      - CERTBOT_OPTIONS=${CERTBOT_OPTIONS}
+    entrypoint: [ "/bin/sh", "-c" ]
+    command:
+      - |
+        envsubst '$$CERTBOT_EMAIL $$CERTBOT_DOMAIN $$CERTBOT_OPTIONS' < /update-cert.sh.template > /update-cert.sh
+        chmod +x /update-cert.sh
+        tail -f /dev/null
 
   # The nginx reverse proxy.
   # used for reverse proxying the API service and Web service.
