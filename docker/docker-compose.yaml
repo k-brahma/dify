@@ -305,7 +305,8 @@ services:
       - ./volumes/certbot/conf:/etc/letsencrypt
       - ./volumes/certbot/www:/var/www/html
       - ./volumes/certbot/logs:/var/log/letsencrypt
-      - ./nginx/ssl:/etc/letsencrypt/live/${CERTBOT_DOMAIN}
+      - ./volumes/certbot/conf/live:/etc/letsencrypt/live
+      # - ./nginx/ssl:/etc/letsencrypt/live/
       - ./certbot/update-cert.sh.template:/update-cert.sh.template
       - ./certbot/docker-entrypoint.sh:/docker-entrypoint.sh
     environment:
@@ -326,7 +327,9 @@ services:
       - ./nginx/https.conf.template:/etc/nginx/https.conf.template
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/docker-entrypoint.sh:/docker-entrypoint-mount.sh
-      - ./nginx/ssl:/etc/ssl
+      # cert dirs
+      - ./nginx/ssl:/etc/ssl # legacy
+      - ./volumes/certbot/conf/live:/etc/letsencrypt/live # use certbot container
       # certbot volumes
       - ./volumes/certbot/conf:/etc/letsencrypt:ro
       - ./volumes/certbot/www:/var/www/html
