@@ -10,7 +10,7 @@ if [ -f "/etc/letsencrypt/renewal/${CERT_NAME}.conf" ]; then
   certbot renew --noninteractive --cert-name ${CERT_NAME} --webroot --webroot-path=/var/www/html --email ${EMAIL} --agree-tos --no-eff-email ${OPTIONS}
 else
   echo "Certificate does not exist. Obtaining a new certificate..."
-  certbot certonly --noninteractive --cert-name ${CERT_NAME} --webroot --webroot-path=/var/www/html --email ${EMAIL} --agree-tos --no-eff-email -d ${DOMAIN} ${OPTIONS}
+  certbot certonly --noninteractive --webroot --webroot-path=/var/www/html --email ${EMAIL} --agree-tos --no-eff-email -d ${DOMAIN} ${OPTIONS}
 fi
 echo "Certificate operation successful"
 # Note: Nginx reload should be handled outside this container
