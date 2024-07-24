@@ -1,25 +1,21 @@
 #!/bin/bash
+set -e
+
+DOMAIN="${CERTBOT_DOMAIN}"
+EMAIL="${CERTBOT_EMAIL}"
+OPTIONS="${CERTBOT_OPTIONS}"
+CERT_NAME="${DOMAIN}"  # 証明書名をドメイン名と同じにする
 
 # Check if the certificate already exists
-if [ -d "/etc/letsencrypt/live/${CERTBOT_DOMAIN}" ]; then
+if [ -d "/etc/letsencrypt/live/${CERT_NAME}" ]; then
   echo "Certificate exists. Attempting to renew..."
-  certbot renew --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email ${CERTBOT_OPTIONS}
+  certbot renew --noninteractive --cert-name ${CERT_NAME} --webroot --webroot-path=/var/www/html --email ${EMAIL} --agree-tos --no-eff-email ${OPTIONS}
 else
   echo "Certificate does not exist. Obtaining a new certificate..."
-  certbot certonly --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
+  certbot certonly --noninteractive --cert-name ${CERT_NAME} --webroot --webroot-path=/var/www/html --email ${EMAIL} --agree-tos --no-eff-email -d ${DOMAIN} ${OPTIONS}
 fi
 
 echo "Certificate operation successful"
 
-# Attempt to reload Nginx
-if command -v docker &>/dev/null; then
-  echo "Attempting to reload Nginx..."
-  if docker exec nginx nginx -s reload; then
-    echo "Nginx reload successful"
-  else
-    echo "Failed to reload Nginx. Please check your Nginx configuration."
-  fi
-else
-  echo "Docker command not available. Unable to reload Nginx automatically."
-  echo "Please reload Nginx manually if necessary."
-fi
+# Note: Nginx reload should be handled outside this container
+echo "Please ensure to reload Nginx to apply any certificate changes."
