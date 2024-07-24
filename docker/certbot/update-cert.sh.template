@@ -8,20 +8,18 @@ else
   echo "Certificate does not exist. Obtaining a new certificate..."
   certbot certonly --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
 fi
-# Renew the certificate
-certbot renew --webroot --webroot-path=/var/www/html --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
 
-# Check the exit status
-if [ $? -eq 0 ]; then
-  echo "Certificate operation successful"
-  # Reload Nginx to apply the new certificate
-  # This assumes Nginx is running in a separate container named 'nginx'
-  docker exec nginx nginx -s reload
-  echo "Certificate renewal successful"
-  # Reload Nginx to apply the new certificate
-  # This assumes Nginx is running in a separate container named 'nginx'
-  docker exec nginx nginx -s reload
+echo "Certificate operation successful"
+
+# Attempt to reload Nginx
+if command -v docker &>/dev/null; then
+  echo "Attempting to reload Nginx..."
+  if docker exec nginx nginx -s reload; then
+    echo "Nginx reload successful"
+  else
+    echo "Failed to reload Nginx. Please check your Nginx configuration."
+  fi
 else
-  echo "Certificate operation failed"
-  echo "Certificate renewal failed"
+  echo "Docker command not available. Unable to reload Nginx automatically."
+  echo "Please reload Nginx manually if necessary."
 fi
