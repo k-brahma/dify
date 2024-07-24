@@ -295,21 +295,6 @@ services:
       - ssrf_proxy_network
       - default
 
-  # Certbot service.
-  # Certbot standalone service for initial certificate acquisition
-  certbot-standalone:
-    image: certbot/certbot
-    profiles:
-      - certbot-standalone
-    network_mode: host
-    volumes:
-      - ./volumes/certbot/conf:/etc/letsencrypt
-      - ./volumes/certbot/www:/var/www/html
-      - ./volumes/certbot/logs:/var/log/letsencrypt
-    ports:
-      - "80:80"
-    command: certonly --standalone --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${CERTBOT_DOMAIN} ${CERTBOT_OPTIONS}
-
   # Existing Certbot service
   # used for generating SSL certificates.
   # use `docker-compose --profile certbot up` to start the certbot service.
