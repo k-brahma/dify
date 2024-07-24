@@ -329,8 +329,7 @@ services:
       # - ./nginx/ssl:/etc/ssl
       - ./volumes/certbot/conf:/etc/letsencrypt:ro
       - ./volumes/certbot/www:/var/www/html
-      - ./volumes/certbot/conf/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_FILENAME}:/etc/ssl/${NGINX_SSL_CERT_FILENAME}:ro
-      - ./volumes/certbot/conf/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_KEY_FILENAME}:/etc/ssl/${NGINX_SSL_CERT_KEY_FILENAME}:ro
+      - ./volumes/certbot/conf/live/${CERTBOT_DOMAIN}:/etc/ssl
     entrypoint: [ "sh", "-c", "cp /docker-entrypoint-mount.sh /docker-entrypoint.sh && sed -i 's/\r$$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh && /docker-entrypoint.sh" ]
     environment:
       NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:-_}
