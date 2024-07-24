@@ -310,12 +310,8 @@ services:
       - CERTBOT_EMAIL=${CERTBOT_EMAIL}
       - CERTBOT_DOMAIN=${CERTBOT_DOMAIN}
       - CERTBOT_OPTIONS=${CERTBOT_OPTIONS}
-    entrypoint: [ "/bin/sh", "-c" ]
-    command:
-      - |
-        envsubst '$$CERTBOT_EMAIL $$CERTBOT_DOMAIN $$CERTBOT_OPTIONS' < /update-cert.sh.template > /update-cert.sh
-        chmod +x /update-cert.sh
-        tail -f /dev/null
+    entrypoint: ["/usr/local/bin/docker-entrypoint.sh"]
+    command: ["tail", "-f", "/dev/null"]  # Keep the container running
 
   # The nginx reverse proxy.
   # used for reverse proxying the API service and Web service.
