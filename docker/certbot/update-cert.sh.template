@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
+
 DOMAIN="${CERTBOT_DOMAIN}"
 EMAIL="${CERTBOT_EMAIL}"
 OPTIONS="${CERTBOT_OPTIONS}"
 CERT_NAME="${DOMAIN}" # 証明書名をドメイン名と同じにする
+
 # Check if the certificate already exists
 if [ -f "/etc/letsencrypt/renewal/${CERT_NAME}.conf" ]; then
   echo "Certificate exists. Attempting to renew..."
