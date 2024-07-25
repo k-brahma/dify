@@ -6,8 +6,8 @@ if [ "${NGINX_HTTPS_ENABLED}" = "true" ]; then
         SSL_CERTIFICATE_PATH="/etc/letsencrypt/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_FILENAME}"
         SSL_CERTIFICATE_KEY_PATH="/etc/letsencrypt/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_KEY_FILENAME}"
     else
-        SSL_CERTIFICATE_PATH="/etc/letsencrypt/live/${NGINX_SSL_CERT_FILENAME}"
-        SSL_CERTIFICATE_KEY_PATH="/etc/letsencrypt/live/${NGINX_SSL_CERT_KEY_FILENAME}"
+        SSL_CERTIFICATE_PATH="/etc/ssl/${NGINX_SSL_CERT_FILENAME}"
+        SSL_CERTIFICATE_KEY_PATH="/etc/ssl/${NGINX_SSL_CERT_KEY_FILENAME}"
     fi
     export SSL_CERTIFICATE_PATH
     export SSL_CERTIFICATE_KEY_PATH
