@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "${NGINX_HTTPS_ENABLED}" = "true" ]; then
-    # Check if the certificate and key files exist for the specified domain
+    # Check if the certificate and key files for the specified domain exist
     if [ -f "/etc/letsencrypt/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_FILENAME}" ] && [ -f "/etc/letsencrypt/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_KEY_FILENAME}" ]; then
         SSL_CERTIFICATE_PATH="/etc/letsencrypt/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_FILENAME}"
         SSL_CERTIFICATE_KEY_PATH="/etc/letsencrypt/live/${CERTBOT_DOMAIN}/${NGINX_SSL_CERT_KEY_FILENAME}"
@@ -19,7 +19,7 @@ if [ "${NGINX_HTTPS_ENABLED}" = "true" ]; then
     envsubst '${HTTPS_CONFIG}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 fi
 
-if [ "${NGINX_CREATE_CERTBOT_CHALNENGE_LOCATION}" = "true" ]; then
+if [ "${NGINX_CREATE_CERTBOT_CHALLENGE_LOCATION}" = "true" ]; then
     ACME_CHALLENGE_LOCATION='location /.well-known/acme-challenge/ { root /var/www/html; }'
 else
     ACME_CHALLENGE_LOCATION=''

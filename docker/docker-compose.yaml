@@ -312,7 +312,7 @@ services:
     environment:
       - CERTBOT_EMAIL=${CERTBOT_EMAIL}
       - CERTBOT_DOMAIN=${CERTBOT_DOMAIN}
-      - CERTBOT_OPTIONS=${CERTBOT_OPTIONS}
+      - CERTBOT_OPTIONS=${CERTBOT_OPTIONS:-}
     entrypoint: [ "/docker-entrypoint.sh" ]
     command: sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'
 
@@ -330,10 +330,8 @@ services:
       # cert dirs
       - ./nginx/ssl:/etc/ssl # legacy
       - ./volumes/certbot/conf/live:/etc/letsencrypt/live # use certbot container
-      # certbot volumes
-      - ./volumes/certbot/conf:/etc/letsencrypt:ro
+      - ./volumes/certbot/conf:/etc/letsencrypt
       - ./volumes/certbot/www:/var/www/html
-      # - ./volumes/certbot/conf/live/${CERTBOT_DOMAIN}:/etc/ssl
     entrypoint: [ "sh", "-c", "cp /docker-entrypoint-mount.sh /docker-entrypoint.sh && sed -i 's/\r$$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh && /docker-entrypoint.sh" ]
     environment:
       NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:-_}
@@ -350,7 +348,7 @@ services:
       NGINX_KEEPALIVE_TIMEOUT: ${NGINX_KEEPALIVE_TIMEOUT:-65}
       NGINX_PROXY_READ_TIMEOUT: ${NGINX_PROXY_READ_TIMEOUT:-3600s}
       NGINX_PROXY_SEND_TIMEOUT: ${NGINX_PROXY_SEND_TIMEOUT:-3600s}
-      NGINX_CREATE_CERTBOT_CHALNENGE_LOCATION: ${NGINX_CREATE_CERTBOT_CHALNENGE_LOCATION:-false}
+      NGINX_CREATE_CERTBOT_CHALLENGE_LOCATION: ${NGINX_CREATE_CERTBOT_CHALLENGE_LOCATION:-false}
       CERTBOT_DOMAIN: ${CERTBOT_DOMAIN}
     depends_on:
       - api
