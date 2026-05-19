@@ -257,6 +257,7 @@ services:
     volumes:
       # Mount the storage directory to the container, for storing user files.
       - ./volumes/app/storage:/app/api/storage
+      - ./volumes/app/home:/home/dify
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
       interval: 30s
@@ -324,6 +325,7 @@ services:
     volumes:
       # Mount the storage directory to the container, for storing user files.
       - ./volumes/app/storage:/app/api/storage
+      - ./volumes/app/home:/home/dify
     healthcheck:
       test: ["CMD-SHELL", "celery -A celery_healthcheck.celery inspect ping"]
       interval: ${COMPOSE_WORKER_HEALTHCHECK_INTERVAL:-30s}
@@ -359,6 +361,9 @@ services:
         required: false
       redis:
         condition: service_started
+    volumes:
+      - ./volumes/app/storage:/app/api/storage
+      - ./volumes/app/home:/home/dify
     healthcheck:
       test: ["CMD-SHELL", "celery -A celery_healthcheck.celery inspect ping"]
       interval: ${COMPOSE_WORKER_HEALTHCHECK_INTERVAL:-30s}
